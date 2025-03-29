@@ -1,0 +1,6 @@
+﻿services:
+  rss-reader:
+    image: rss-reader
+    build:
+      context: .
+      dockerfile: rss-reader/Dockerfile
