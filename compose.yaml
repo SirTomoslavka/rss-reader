@@ -1,6 +1,25 @@
 ﻿services:
-  rss-reader:
-    image: rss-reader
+  db:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - rss-reader/.env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+
+  app:
     build:
       context: .
       dockerfile: rss-reader/Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - rss-reader/.env
+    volumes:
+      - app-data:/app/DataProtection-Keys
+
+volumes:
+  data:
+  app-data:

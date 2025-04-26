@@ -1,0 +1,14 @@
+bin/
+obj/
+secrets.json
+.idea/
+
+logs/
+*.log
+
+.env
+
+app.zip
+publish
+
+node_modules/

@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "New feed";
+}
+<div class="max-w-lg mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-6">Add new feed</h1>
+    <form asp-action="AddFeedPost" class="space-y-6">
+        @Html.AntiForgeryToken()
+        <div>
+            <label class="block text-sm font-medium text-gray-700" for="url">Feed URL</label>
+            <input id="url" name="url" type="text" placeholder="Feed url" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"/>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700" for="name">Feed name (optional)</label>
+            <input id="name" name="name" type="text" placeholder="Feed name (optional)" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"/>
+        </div>
+        <div>
+            <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200">
+                Create
+            </button>
+        </div>
+    </form>
+</div>

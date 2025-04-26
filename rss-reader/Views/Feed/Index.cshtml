@@ -1,0 +1,119 @@
+@model rss_reader.Data.Feed
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Articles";
+}
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-6 text-center">@Model.Name - detail</h1>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+        <button class="w-40 inline-block px-4 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors duration-200" onclick="openModal('@Model.FeedId', '@Model.Name')">
+            Delete feed
+        </button>
+        <a href="/feed/detail?feedId=@Model.FeedId" class="w-40 inline-block px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors duration-200 text-center">
+            Feed detail
+        </a>
+        <form asp-action="RefreshArticles">
+            @Html.AntiForgeryToken()
+            <input type="hidden" value="@Model.FeedId" name="feedId"/>
+            <button type="submit" class="w-40 inline-block px-4 py-2 bg-yellow-600 text-white font-semibold rounded-md hover:bg-yellow-700 transition-colors duration-200">
+                Reload articles
+            </button>
+        </form>
+    </div>
+    <div class="text-center mb-6">
+        <form asp-action="Search" id="searchForm" method="get" target="_blank">
+            <label for="id" class="block text-sm mt-6 font-medium text-gray-700">Search for an article</label>
+            <input
+                id="element"
+                placeholder="Start typing…"
+                autocomplete="off"
+                list="list"
+                class="mt-1 w-96 px-3 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+            <input type="hidden" name="id" id="id" />
+            <datalist id="list">
+                @foreach(var f in @Model.Articles){
+                    <option data-id="@f.ArticleId" value="@f.Title"></option>
+                }
+            </datalist>
+            <button
+                type="submit"
+                id="searchButton"
+                disabled
+                class="w-48 mt-2 px-4 py-2     
+                bg-blue-600 text-white rounded-md
+                hover:bg-blue-700
+                disabled:bg-gray-400
+                disabled:hover:bg-gray-400
+                    disabled:opacity-50
+                    disabled:cursor-not-allowed
+                    transition duration-200"
+            >
+                Open (new window)
+            </button>
+        </form>
+    </div>
+    <form asp-action="Index" method="get" id="dateFilterForm" class="mb-6 px-4 sm:px-0">
+        @Html.Hidden("feedId", @Model.FeedId)
+        <div class="flex flex-col sm:flex-row sm:items-end gap-4 justify-center mb-6">
+            <div class="flex flex-col">
+                <label for="fromDate" class="block text-sm font-medium text-gray-700">
+                    From date
+                </label>
+                <input
+                    type="date"
+                    id="fromDate"
+                    name="fromDate"
+                    autocomplete="off"
+                    class="mt-1 w-40 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"/>
+            </div>
+            <div class="flex flex-col">
+                <label for="toDate" class="block text-sm font-medium text-gray-700">
+                    To date
+                </label>
+                <input
+                    type="date"
+                    id="toDate"
+                    name="toDate"
+                    placeholder="DD.MM.YYYY"
+                    autocomplete="off"
+                    class="mt-1 w-40 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"/>
+            </div>
+        </div>
+        <div class="flex justify-center gap-4">
+            <button
+                type="submit"
+                id="filterButton"
+                disabled
+                class="w-40 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+                Filter
+            </button>
+            <a href="/feed?feedId=@Model.FeedId" class="w-40 inline-block px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition-colors duration-200 text-center">
+                Clear filter
+            </a>
+        </div>
+    </form>
+    <hr>
+    @foreach (var article in Model.Articles)
+    {
+        <div class="border border-gray-200 rounded-lg p-4 mt-4 mb-4">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">@article.Title</h3>
+            <p class="text-gray-600 mb-2">Published: @article.Published.ToString("d. M. yyyy H:mm", CultureInfo.GetCultureInfo("cs-CZ"))</p>
+            <div class="text-center">
+                <a target="_blank" href="@article.Link"
+                   class="w-72 inline-block px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition-colors">
+                    Read article (new window)
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@await Html.PartialAsync("_DeleteModal")
+
+@section Scripts {
+    <script src="~/js/deleteModal.js"></script>
+    <script src="~/js/searchLabel.js"></script>
+    <script src="~/js/filter.js"></script>
+}

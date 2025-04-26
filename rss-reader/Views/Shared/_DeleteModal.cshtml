@@ -1,0 +1,23 @@
+<div id="deleteModal" class="fixed inset-0 hidden items-center justify-center bg-gray-900 bg-opacity-50">
+    <div class="bg-white rounded shadow-md p-6 w-96">
+        <h2 class="text-xl font-bold mb-4">Delete feed</h2>
+        <p class="mb-4" id="deleteModalBody">Are you sure you want to delete?</p>
+
+        <form id="deleteForm" method="post" action="/feed/delete">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="feedsId" id="deleteFeedId" value=""/>
+            <input type="hidden" name="_method" value="DELETE"/>
+            <div class="flex justify-end">
+                <button type="button"
+                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2"
+                        onclick="closeModal()">
+                    Cancel
+                </button>
+                <button type="submit"
+                        class="bg-red-600 text-white px-4 py-2 rounded">
+                    Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

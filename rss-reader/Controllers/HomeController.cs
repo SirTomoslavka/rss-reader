@@ -1,28 +1,27 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using rss_reader.Models;
+using rss_reader.Services;
 
 namespace rss_reader.Controllers;
 
-public class HomeController : Controller
+public class HomeController(RssService rss) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    [HttpGet("")]
+    public async Task<IActionResult> Index()
     {
-        _logger = logger;
+        var model = await rss.GetAllFeedsAsync();
+
+        return View(model);
     }
 
-    public IActionResult Index()
+    [HttpGet("feed/search")]
+    public IActionResult Search(Guid id)
     {
-        return View();
+        return RedirectToAction(nameof(Index), "Feed", new { feedId = id });
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
+    [HttpGet("error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
