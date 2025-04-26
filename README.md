@@ -69,3 +69,8 @@ RSS Reader lets you:
    ```bash
    git clone git@github.com:SirTomoslavka/rss-reader.git
    cd rss-reader
+   npm i 
+   dotnet build
+   docker-compose up -d
+   dotnet ef migrations add init
+   dotnet ef database update
